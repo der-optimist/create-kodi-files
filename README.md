@@ -18,3 +18,5 @@ This Python Programm will:
   - require python3, ffmpeg and ffmpeg-normalize installed
   - hopefully run on every OS (Win, Linux, MacOS) - but is tested only on Win10
   - hopefully help you!
+You can see a preview here:
+https://www.kodinerds.net/index.php/Attachment/31559-Unbenannt-png/

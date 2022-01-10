@@ -182,4 +182,3 @@ Remove-Item -Path $ffmpegInput -ErrorAction SilentlyContinue
 Write-Host "########################"
 write-host "#######  Fertig  #######"
 Write-Host "########################"
-$Schnitt = if($Value=(Read-Host "Sollen Filme geschnitten werden? (Enter = ja)")){$Value}else{"ja"}

@@ -49,7 +49,7 @@ ForEach ($Datei in $MP4Dateien) {
 
 # Schnittinfo anzeigen und auf Aenderung warten
 if ($Schnitt -eq "ja") {
-    start "C:\Users\F36121\Programme\npp.7.5.8\notepad++.exe" $SchnittinfoDatei
+    start "C:\Windows\System32\notepad.exe" $SchnittinfoDatei
     Write-Host
     Read-Host -Prompt "Ist die Liste fertig und gespeichert? Dann weiter mit Enter"
 }

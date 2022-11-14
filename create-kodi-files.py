@@ -3,7 +3,7 @@ import tkinter as tk
 import tkinter.filedialog
 from PIL import ImageTk, Image
 import os, os.path, time
-from shutil import move
+from shutil import copy, move
 import cv2
 from subprocess import check_output
 import codecs
@@ -156,7 +156,7 @@ class MainWindow():
                 os.utime(self.list_files[i], (stat.st_atime,stat.st_mtime))
                 # rename fanart
                 frame_fanart = self.list_files[i][:-len(self.filetype)] + '_frame0' + str(self.list_fanart[i] + 1) + '.jpg'
-                move(frame_fanart, self.list_files[i][:-len(self.filetype)] + '-fanart.jpg')
+                copy(frame_fanart, self.list_files[i][:-len(self.filetype)] + '-fanart.jpg')
                 # combine poster1 and poster2 to poster
                 poster = Image.new('RGB', (954,1080), (0, 0, 0))
                 poster1 = Image.open(self.list_files[i][:-len(self.filetype)] + '_frame0' + str(self.list_poster1[i] + 1) + '.jpg')

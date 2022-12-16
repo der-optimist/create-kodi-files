@@ -62,6 +62,7 @@ class MainWindow():
         self.entry_title.insert(0, self.list_titles[index])
         self.var_embarr.set(self.list_embarrassing[index])
         self.text_curr_page.set("Film " + str(self.current_index + 1) + " von " + str(len(self.list_files)))
+        self.folder_path.set(self.folder + ' - aktueller Film: ' + self.list_timestamps[index])
         self.load_frames(index)
     
     def load_frames(self, index):
@@ -103,6 +104,7 @@ class MainWindow():
         self.folder = tk.filedialog.askdirectory()
         self.folder_path.set(self.folder)
         self.list_files = self.get_files(self.folder_path.get(), self.filetype)
+        self.list_timestamps = []
         if len(self.list_files) > 0:
             self.init_var_lists(self.list_files)
             self.text_curr_page.set("Erstelle Bilder")
@@ -111,6 +113,9 @@ class MainWindow():
                 root.update()
                 self.extract_frames(self.list_files[i])
                 self.text_status.set("Bilder von allen Filmen erstellt => es kann los gehen ✔️")
+                ts = os.stat(self.list_files[i]).st_mtime
+                ts_readable = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(ts)))
+                self.list_timestamps.append(ts_readable)
             self.current_index = 0
             self.update_page(self.current_index)
         else:
@@ -219,9 +224,11 @@ class MainWindow():
         # define
         self.button_directory = tk.Button(text="Ordner", command=self.update_directory, takefocus = 0)
         self.label_directory = tk.Label(master=root,textvariable=self.folder_path)
+        self.button_play = tk.Button(text="Zeig!", command=self.update_directory, takefocus = 0)
         # arrange
         self.button_directory.grid(row=0, column=1)
-        self.label_directory.grid(row=0, column=3, columnspan=20)
+        self.label_directory.grid(row=0, column=3, columnspan=14)
+        self.button_play.grid(row=0, column=15)
         tk.Frame(height=2, bd=1, relief=tk.SUNKEN).grid(row=1, column=1, columnspan=20, sticky="ew", pady=5)
     
     def create_window_main(self):

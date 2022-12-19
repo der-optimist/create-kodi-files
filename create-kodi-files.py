@@ -133,6 +133,9 @@ class MainWindow():
         if self.current_index > 0:
             self.current_index -= 1
         self.update_page(self.current_index)
+
+    def play_video(self):
+        os.startfile(self.list_files[self.current_index])
     
     def count_frames(self, video_filename):
         cap = cv2.VideoCapture(video_filename)
@@ -224,11 +227,11 @@ class MainWindow():
         # define
         self.button_directory = tk.Button(text="Ordner", command=self.update_directory, takefocus = 0)
         self.label_directory = tk.Label(master=root,textvariable=self.folder_path)
-        self.button_play = tk.Button(text="Zeig!", command=self.update_directory, takefocus = 0)
+        self.button_play = tk.Button(text="Zeig!", command=self.play_video, takefocus = 0)
         # arrange
         self.button_directory.grid(row=0, column=1)
-        self.label_directory.grid(row=0, column=3, columnspan=14)
-        self.button_play.grid(row=0, column=15)
+        self.label_directory.grid(row=0, column=3, columnspan=8)
+        self.button_play.grid(row=0, column=12)
         tk.Frame(height=2, bd=1, relief=tk.SUNKEN).grid(row=1, column=1, columnspan=20, sticky="ew", pady=5)
     
     def create_window_main(self):

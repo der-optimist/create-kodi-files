@@ -72,7 +72,7 @@ class MainWindow():
                 name_frame = self.list_files[index][:-4] + '_frame0' + str(i+1) + '.jpg'
                 img = Image.open(name_frame)
                 size = self.imagewidth, int(self.imagewidth*img.size[1]/img.size[0])
-                self.list_frames[i] = img.resize(size, Image.ANTIALIAS)
+                self.list_frames[i] = img.resize(size, Image.LANCZOS)
         self.list_images_tk = []
         for i in range(9):
             self.list_images_tk.append(ImageTk.PhotoImage(self.list_frames[i]))
@@ -170,8 +170,8 @@ class MainWindow():
                 poster1 = Image.open(self.list_files[i][:-len(self.filetype)] + '_frame0' + str(self.list_poster1[i] + 1) + '.jpg')
                 poster2 = Image.open(self.list_files[i][:-len(self.filetype)] + '_frame0' + str(self.list_poster2[i] + 1) + '.jpg')
                 size = 938, int(938*poster1.size[1]/poster1.size[0])
-                poster1 = poster1.resize(size, Image.ANTIALIAS)
-                poster2 = poster2.resize(size, Image.ANTIALIAS)
+                poster1 = poster1.resize(size, Image.LANCZOS)
+                poster2 = poster2.resize(size, Image.LANCZOS)
                 poster.paste(poster1, (8, 8, 946, 8 + size[1]))
                 poster.paste(poster2, (8, 544, 946, 544 + size[1]))
                 poster.save(self.list_files[i][:-len(self.filetype)] + '-poster.jpg')

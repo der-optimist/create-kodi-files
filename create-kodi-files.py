@@ -4,7 +4,6 @@ import tkinter.filedialog
 from PIL import ImageTk, Image
 import os, os.path, time
 from shutil import copy, move
-import cv2
 from subprocess import check_output
 import codecs
 
@@ -83,14 +82,30 @@ class MainWindow():
         # check if they already exist
         all_frames_exist = True
         for i in range(1,10):
-            name_frame = video_file[:-len(self.filetype)] + '_frame0' + str(i) + '.jpg'
+            name_frame = video_file[:-(len(video_file.split('.')[-1])+1)] + '_frame0' + str(i) + '.jpg'
             if not os.path.isfile(name_frame):
                 all_frames_exist = False
         if not all_frames_exist:
-            frames = self.count_frames(video_file)
-            name_frames = video_file[:-4] + '_frame%02d.jpg'
-            check_output(['ffmpeg', '-i', video_file, '-vf', 'thumbnail=' + str(round(frames/9)) + ',setpts=N/TB', '-r', '1', '-vframes', '9', name_frames])
-            #out = check_output(['ffmpeg', '-i', video_file, '-vf', 'thumbnail=' + str(round(frames/9)) + ',setpts=N/TB', '-r', '1', '-vframes', '9', name_frames])
+            duration = self.get_video_duarion(video_file)
+            for i in range(1,10):
+                name_frame = video_file[:-(len(video_file.split('.')[-1])+1)] + '_frame0' + str(i) + '.jpg'
+                print(video_file)
+                print(name_frame)
+#                T = (i - 0.5) * duration / 9
+                size_max_chooseframe = 0.0
+                for chooseframe in [-0.2, -0.1, 0.0, 0.1, 0.2]:
+                    T_temp = (i + chooseframe - 0.5) * duration / 9
+                    name_chooseframe = video_file[:-(len(video_file.split('.')[-1])+1)] + '_frame0' + str(i) + '_temp' + '.jpg'
+                    check_output(['ffmpeg', '-ss', str(int(T_temp)), '-i', video_file, '-vframes', '1', name_chooseframe])
+                    file_size = os.path.getsize(name_chooseframe)
+                    print(T_temp)
+                    print(file_size)
+                    if file_size > size_max_chooseframe:
+                        move(os.path.normpath(os.path.join(name_chooseframe)),os.path.normpath(os.path.join(name_frame)))
+                        size_max_chooseframe = file_size
+                    else:
+                        os.remove(name_chooseframe)
+            #check_output(['ffmpeg', '-i', video_file, '-vf', 'thumbnail=' + str(round(frames/9)) + ',setpts=N/TB', '-r', '1', '-vframes', '9', name_frames])
             #print(out)
     
     def save_current_values(self):
@@ -137,12 +152,9 @@ class MainWindow():
     def play_video(self):
         os.startfile(self.list_files[self.current_index])
     
-    def count_frames(self, video_filename):
-        cap = cv2.VideoCapture(video_filename)
-        video_length = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) - 1
-        if cap.isOpened():
-            cap.release()
-        return video_length
+    def get_video_duarion(self, video_filename):
+        result = check_output(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'default=noprint_wrappers=1:nokey=1', video_filename])
+        return float(result)
     
     def work(self):
         self.save_current_values()
